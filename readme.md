@@ -1,6 +1,6 @@
 # AIML308: Mobile Application Development 📱
 
-This repository contains all the practicals, lab assignments, and course projects for **AIML308 - Mobile Application Development**. Each practical is organized into its own directory for clarity and ease of access.
+This repository contains all the practicals for **AIML308 - Mobile Application Development**. Each practical is organized into its own directory for clarity and ease of access.
 
 ## 📂 Repository Structure
 
