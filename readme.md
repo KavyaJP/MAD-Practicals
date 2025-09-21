@@ -34,7 +34,7 @@ Here is a list of all the practicals covered in the course. The status indicates
 | 06  | Create a Notes App with persistent storage using Shared Preferences.                      | Complete |
 | 07  | Design a Product Catalog App using GridView and custom cards with images.                 | Complete |
 | 08  | Connect to a REST API (e.g., weather, user data) and display using FutureBuilder.         | Complete |
-| 09  | Develop a Login Authentication App using API-based credential check and session handling. | Pending  |
+| 09  | Develop a Login Authentication App using API-based credential check and session handling. | Complete |
 | 10  | Create and generate a Signed APK for deployment. Document steps to publish the app.       | Pending  |
 
 ## 🚀 How to Run a Practical
