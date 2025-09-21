@@ -4,7 +4,7 @@ This repository contains all the practicals for **AIML308 - Mobile Application D
 
 ## 📂 Repository Structure
 
-The repository is structured to keep each practical isolated. Each main folder corresponds to a specific lab assignment.
+The repository is structured to keep each practical isolated. Each main folder corresponds to a specific practical.
 
 ```
 .
@@ -35,7 +35,7 @@ Here is a list of all the practicals covered in the course. The status indicates
 | 07  | Design a Product Catalog App using GridView and custom cards with images.                 | Complete |
 | 08  | Connect to a REST API (e.g., weather, user data) and display using FutureBuilder.         | Complete |
 | 09  | Develop a Login Authentication App using API-based credential check and session handling. | Complete |
-| 10  | Create and generate a Signed APK for deployment. Document steps to publish the app.       | Pending  |
+| 10  | Create and generate a Signed APK for deployment. Document steps to publish the app.       | Complete |
 
 ## 🚀 How to Run a Practical
 
