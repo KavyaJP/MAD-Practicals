@@ -55,7 +55,7 @@ To run any of the practicals on your local machine, please follow these steps:
     ```
 2.  **Navigate to a practical's directory:**
     ```
-    cd your-repo-name/Practical-01
+    cd MAD-Practicals/Practical-01
     ```
 3.  **Install dependencies:**
     ```
