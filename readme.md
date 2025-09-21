@@ -51,7 +51,7 @@ To run any of the practicals on your local machine, please follow these steps:
 
 1.  **Clone the repository:**
     ```
-    git clone 
+    git clone https://github.com/KavyaJP/MAD-Practicals.git
     ```
 2.  **Navigate to a practical's directory:**
     ```
