@@ -220,7 +220,7 @@ class _StudentFormDialogState extends State<StudentFormDialog> {
     super.initState();
     _nameCtrl = TextEditingController(text: widget.student?.name ?? '');
     _rollCtrl = TextEditingController(text: widget.student?.rollNo ?? '');
-    _ageCtrl = TextEditingController(text: widget.student?.age?.toString() ?? '');
+    _ageCtrl = TextEditingController(text: widget.student?.age.toString() ?? '');
     _courseCtrl = TextEditingController(text: widget.student?.course ?? '');
   }
 
