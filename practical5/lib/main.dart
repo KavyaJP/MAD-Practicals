@@ -13,7 +13,13 @@ class Student {
   final int age;
   final String course;
 
-  Student({this.id, required this.name, required this.rollNo, required this.age, required this.course});
+  Student({
+    this.id,
+    required this.name,
+    required this.rollNo,
+    required this.age,
+    required this.course,
+  });
 
   Map<String, Object?> toMap() => {
     'id': id,
@@ -27,7 +33,9 @@ class Student {
     id: map['id'] as int?,
     name: map['name'] as String? ?? '',
     rollNo: map['rollNo'] as String? ?? '',
-    age: (map['age'] is int) ? map['age'] as int : int.tryParse(map['age'].toString()) ?? 0,
+    age: (map['age'] is int)
+        ? map['age'] as int
+        : int.tryParse(map['age'].toString()) ?? 0,
     course: map['course'] as String? ?? '',
   );
 }
@@ -38,7 +46,10 @@ class StudentApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Student Records',
-      theme: ThemeData(useMaterial3: true, colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo)),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+      ),
       home: const StudentListPage(),
       debugShowCheckedModeBanner: false,
     );
@@ -111,13 +122,26 @@ class _StudentListPageState extends State<StudentListPage> {
       builder: (ctx) => StudentFormDialog(student: student),
     );
     if (result != null) {
-      final db = await _dbFuture;
-      if (student == null) {
-        await db.insert('students', result.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
-      } else {
-        await db.update('students', result.toMap()..remove('id'), where: 'id = ?', whereArgs: [student.id]);
+      try {
+        final db = await _dbFuture;
+        if (student == null) {
+          await db.insert('students', result.toMap());
+        } else {
+          await db.update(
+            'students',
+            result.toMap()..remove('id'),
+            where: 'id = ?',
+            whereArgs: [student.id],
+          );
+        }
+        _refresh();
+      } on DatabaseException catch (e) {
+        if (mounted && e.isUniqueConstraintError()) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('This Roll No already exists.')),
+          );
+        }
       }
-      _refresh();
     }
   }
 
@@ -137,8 +161,14 @@ class _StudentListPageState extends State<StudentListPage> {
                   title: const Text('Delete all records?'),
                   content: const Text('This action cannot be undone.'),
                   actions: [
-                    TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
-                    FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Delete')),
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx, false),
+                      child: const Text('Cancel'),
+                    ),
+                    FilledButton(
+                      onPressed: () => Navigator.pop(ctx, true),
+                      child: const Text('Delete'),
+                    ),
                   ],
                 ),
               );
@@ -150,47 +180,53 @@ class _StudentListPageState extends State<StudentListPage> {
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _students.isEmpty
-              ? const Center(child: Text('No records yet. Tap + to add a student.'))
-              : ListView.separated(
-                  itemCount: _students.length,
-                  separatorBuilder: (_, __) => const Divider(height: 1),
-                  itemBuilder: (context, index) {
-                    final s = _students[index];
-                    return Dismissible(
-                      key: ValueKey(s.id ?? s.rollNo),
-                      direction: DismissDirection.endToStart,
-                      background: Container(
-                        color: Colors.red,
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: const Icon(Icons.delete, color: Colors.white),
-                      ),
-                      confirmDismiss: (_) async {
-                        return await showDialog<bool>(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            title: const Text('Delete student?'),
-                            content: Text('Delete ${s.name} (${s.rollNo})?'),
-                            actions: [
-                              TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
-                              FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Delete')),
-                            ],
+          ? const Center(child: Text('No records yet. Tap + to add a student.'))
+          : ListView.separated(
+              itemCount: _students.length,
+              separatorBuilder: (_, __) => const Divider(height: 1),
+              itemBuilder: (context, index) {
+                final s = _students[index];
+                return Dismissible(
+                  key: ValueKey(s.id ?? s.rollNo),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    color: Colors.red,
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: const Icon(Icons.delete, color: Colors.white),
+                  ),
+                  confirmDismiss: (_) async {
+                    return await showDialog<bool>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: const Text('Delete student?'),
+                        content: Text('Delete ${s.name} (${s.rollNo})?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(ctx, false),
+                            child: const Text('Cancel'),
                           ),
-                        );
-                      },
-                      onDismissed: (_) => _delete(s.id!),
-                      child: ListTile(
-                        title: Text('${s.name}  •  ${s.course}'),
-                        subtitle: Text('Roll: ${s.rollNo}   Age: ${s.age}'),
-                        onTap: () => _addOrEdit(student: s),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.edit_outlined),
-                          onPressed: () => _addOrEdit(student: s),
-                        ),
+                          FilledButton(
+                            onPressed: () => Navigator.pop(ctx, true),
+                            child: const Text('Delete'),
+                          ),
+                        ],
                       ),
                     );
                   },
-                ),
+                  onDismissed: (_) => _delete(s.id!),
+                  child: ListTile(
+                    title: Text('${s.name}  •  ${s.course}'),
+                    subtitle: Text('Roll: ${s.rollNo}   Age: ${s.age}'),
+                    onTap: () => _addOrEdit(student: s),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit_outlined),
+                      onPressed: () => _addOrEdit(student: s),
+                    ),
+                  ),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _addOrEdit(),
         icon: const Icon(Icons.add),
@@ -220,7 +256,9 @@ class _StudentFormDialogState extends State<StudentFormDialog> {
     super.initState();
     _nameCtrl = TextEditingController(text: widget.student?.name ?? '');
     _rollCtrl = TextEditingController(text: widget.student?.rollNo ?? '');
-    _ageCtrl = TextEditingController(text: widget.student?.age.toString() ?? '');
+    _ageCtrl = TextEditingController(
+      text: widget.student?.age.toString() ?? '',
+    );
     _courseCtrl = TextEditingController(text: widget.student?.course ?? '');
   }
 
@@ -247,11 +285,13 @@ class _StudentFormDialogState extends State<StudentFormDialog> {
       );
       Navigator.of(context).pop(data);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to save: $e')));
     } finally {
-      setState(() => _saving = false);
+      if (mounted) {
+        setState(() => _saving = false);
+      }
     }
   }
 
@@ -269,13 +309,16 @@ class _StudentFormDialogState extends State<StudentFormDialog> {
               TextFormField(
                 controller: _nameCtrl,
                 decoration: const InputDecoration(labelText: 'Name'),
-                validator: (v) => (v == null || v.trim().isEmpty) ? 'Name is required' : null,
+                validator: (v) =>
+                    (v == null || v.trim().isEmpty) ? 'Name is required' : null,
               ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _rollCtrl,
                 decoration: const InputDecoration(labelText: 'Roll No'),
-                validator: (v) => (v == null || v.trim().isEmpty) ? 'Roll No is required' : null,
+                validator: (v) => (v == null || v.trim().isEmpty)
+                    ? 'Roll No is required'
+                    : null,
               ),
               const SizedBox(height: 8),
               TextFormField(
@@ -294,17 +337,28 @@ class _StudentFormDialogState extends State<StudentFormDialog> {
               TextFormField(
                 controller: _courseCtrl,
                 decoration: const InputDecoration(labelText: 'Course'),
-                validator: (v) => (v == null || v.trim().isEmpty) ? 'Course is required' : null,
+                validator: (v) => (v == null || v.trim().isEmpty)
+                    ? 'Course is required'
+                    : null,
               ),
             ],
           ),
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
         FilledButton.icon(
           onPressed: _saving ? null : _save,
-          icon: _saving ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2)) : const Icon(Icons.save_outlined),
+          icon: _saving
+              ? const SizedBox(
+                  height: 18,
+                  width: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : const Icon(Icons.save_outlined),
           label: Text(isEdit ? 'Update' : 'Save'),
         ),
       ],
