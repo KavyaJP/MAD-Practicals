@@ -6,9 +6,7 @@ import 'exam.dart';
 
 class ExamEntryScreen extends StatefulWidget {
   final Exam? exam;
-
   const ExamEntryScreen({super.key, this.exam});
-
   @override
   State<ExamEntryScreen> createState() => _ExamEntryScreenState();
 }

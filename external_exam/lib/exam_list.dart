@@ -36,9 +36,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
 
     ExamStorage.readAllExams().then((data) {
       final now = DateTime.now();
-
       data.sort((a, b) => a.dateTime.compareTo(b.dateTime));
-
       Exam? foundNextExam;
       for (var exam in data) {
         if (exam.dateTime.isAfter(now)) {
@@ -102,7 +100,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Colors.black,
           ),
           textAlign: TextAlign.center,
         ),
@@ -143,7 +141,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
                               final isNextExam = exam.id == _nextExam?.id;
                               return Card(
                                 color: isNextExam
-                                    ? Colors.indigo.withOpacity(0.3)
+                                    ? Colors.blue.withOpacity(0.3)
                                     : null,
                                 child: ListTile(
                                   title: Text(
