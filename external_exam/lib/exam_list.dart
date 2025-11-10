@@ -100,7 +100,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: Colors.white,
           ),
           textAlign: TextAlign.center,
         ),
