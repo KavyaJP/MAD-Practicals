@@ -17,7 +17,7 @@ class Exam {
     required this.time,
     required this.venue,
     this.docPath,
-  }) : this.id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
+  }) : id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
 
   DateTime get dateTime =>
       DateTime(date.year, date.month, date.day, time.hour, time.minute);
