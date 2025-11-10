@@ -94,7 +94,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
     }
 
     return Card(
-      color: Colors.indigo.shade700,
+      color: Colors.blue,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Text(
@@ -113,7 +113,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Exam Schedule')),
+      appBar: AppBar(title: const Text('Exam Timetable')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : Padding(
@@ -159,20 +159,20 @@ class _ExamListScreenState extends State<ExamListScreen> {
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      if (exam.documentPath != null &&
-                                          exam.documentPath!.isNotEmpty)
+                                      if (exam.docPath != null &&
+                                          exam.docPath!.isNotEmpty)
                                         IconButton(
                                           icon: const Icon(
                                             Icons.attach_file,
-                                            color: Colors.blueAccent,
+                                            color: Colors.blue,
                                           ),
                                           onPressed: () =>
-                                              OpenFile.open(exam.documentPath),
+                                              OpenFile.open(exam.docPath),
                                         ),
                                       IconButton(
                                         icon: const Icon(
                                           Icons.edit,
-                                          color: Colors.grey,
+                                          color: Colors.white,
                                         ),
                                         onPressed: () => _navigateAndRefresh(
                                           context,
@@ -182,7 +182,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
                                       IconButton(
                                         icon: const Icon(
                                           Icons.delete,
-                                          color: Colors.redAccent,
+                                          color: Colors.red,
                                         ),
                                         onPressed: () {
                                           ExamStorage.delete(exam.id).then((_) {

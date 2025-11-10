@@ -8,7 +8,7 @@ class Exam {
   final DateTime date;
   final TimeOfDay time;
   final String venue;
-  final String? documentPath;
+  final String? docPath;
 
   Exam({
     String? id,
@@ -16,7 +16,7 @@ class Exam {
     required this.date,
     required this.time,
     required this.venue,
-    this.documentPath,
+    this.docPath,
   }) : this.id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
 
   DateTime get dateTime =>
@@ -30,7 +30,7 @@ class Exam {
       'time':
           '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}',
       'venue': venue,
-      'documentPath': documentPath,
+      'documentPath': docPath,
     };
   }
 
@@ -45,7 +45,7 @@ class Exam {
         minute: int.parse(timeParts[1]),
       ),
       venue: map['venue'] as String,
-      documentPath: map['documentPath'] as String?,
+      docPath: map['documentPath'] as String?,
     );
   }
 }

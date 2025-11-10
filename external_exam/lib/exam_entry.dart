@@ -19,8 +19,8 @@ class _ExamEntryScreenState extends State<ExamEntryScreen> {
   late TextEditingController _venueController;
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
-  String? _documentPath;
-  String? _documentName;
+  String? _docPath;
+  String? _docName;
 
   @override
   void initState() {
@@ -31,9 +31,9 @@ class _ExamEntryScreenState extends State<ExamEntryScreen> {
     _venueController = TextEditingController(text: widget.exam?.venue);
     _selectedDate = widget.exam?.date;
     _selectedTime = widget.exam?.time;
-    _documentPath = widget.exam?.documentPath;
-    if (_documentPath != null) {
-      _documentName = p.basename(_documentPath!);
+    _docPath = widget.exam?.docPath;
+    if (_docPath != null) {
+      _docName = p.basename(_docPath!);
     }
   }
 
@@ -76,8 +76,8 @@ class _ExamEntryScreenState extends State<ExamEntryScreen> {
     FilePicker.platform.pickFiles().then((result) {
       if (result != null) {
         setState(() {
-          _documentPath = result.files.single.path;
-          _documentName = result.files.single.name;
+          _docPath = result.files.single.path;
+          _docName = result.files.single.name;
         });
       }
     });
@@ -93,7 +93,7 @@ class _ExamEntryScreenState extends State<ExamEntryScreen> {
         venue: _venueController.text,
         date: _selectedDate!,
         time: _selectedTime!,
-        documentPath: _documentPath,
+        docPath: _docPath,
       );
 
       if (widget.exam == null) {
@@ -175,15 +175,15 @@ class _ExamEntryScreenState extends State<ExamEntryScreen> {
                 icon: const Icon(Icons.upload_file),
                 label: const Text('Upload Supporting Document'),
               ),
-              if (_documentName != null)
+              if (_docName != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Chip(
-                    label: Text(_documentName!),
+                    label: Text(_docName!),
                     onDeleted: () {
                       setState(() {
-                        _documentPath = null;
-                        _documentName = null;
+                        _docPath = null;
+                        _docName = null;
                       });
                     },
                   ),
